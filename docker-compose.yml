@@ -1,0 +1,14 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+        - "5432:5432"
+    environment:
+        POSTGRES_USER: "${DB_USER_ID}"
+        POSTGRES_PASSWORD: "${DB_USER_PW}"
+    volumes:
+        - ./data:/var/lib/postgresql/data
+        # 도커 컨테이너를 실행하고, 컨테이너를 없애면 모든 데이터가 없어지게 되는데, volume으로 data 폴더를 로컬에 두면 컨테이너를 없애도 로컬에 계속 남아있다.
