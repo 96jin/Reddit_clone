@@ -4,6 +4,8 @@ import Entity1 from "./Entity1";
 import User from './User';
 import Sub from './Sub';
 import Vote from './Vote';
+import Comment from "./Comment";
+import { makeId , slugfy } from "../utils/helper";
 
 @Entity('posts')
 export default class Post extends Entity1{
@@ -23,7 +25,7 @@ export default class Post extends Entity1{
   body: string;
 
   @Column() 
-  subName: string;
+  subName: string; 
 
   @Column()
   username: string;
@@ -44,14 +46,15 @@ export default class Post extends Entity1{
   @OneToMany(()=>Vote, (vote)=>vote.post)
   votes: Vote[];
 
-  @Expose()
+  @Expose()   // 변환할때 return 값을 프론트단으로 전송해준다.
   get url(): string {
     return `/r/${this.subName}/${this.identifier}/${this.slug}`
+    // 레딧에서 경로가 r 로 시작하기 때문에 따라하는것이다.
   }
 
   @Expose()
   get comentCount(): number {
-    return this.comments?.length
+    return this.comments?.length  // comments가 있을때만 실행
   }
 
   @Expose()
@@ -66,7 +69,7 @@ export default class Post extends Entity1{
     this.userVote = index > -1 ? this.votes[index].value : 0;
   }
 
-  @BeforeInsert()
+  @BeforeInsert() // 값을 DB에 저장하기전에 아래 함수를 실행해서 값을 변환
   makeIdAndSlug(){
     this.identifier = makeId(7);
     this.slug = slugfy(this.title)
