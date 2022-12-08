@@ -70,7 +70,7 @@ const login = async (req: Request, res: Response) => {
 
     // DB에서 유저 찾기
     const user = await User.findOneBy({ email });
-
+    
     // 유저가 없다면 에러 보내기
     if (!user)
       return res.status(404).json({ email: "등록되어있지 않은 메일입니다." });
