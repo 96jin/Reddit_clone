@@ -3,13 +3,20 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { FormEvent, useState } from 'react'
 import InputGroup from '../components/InputGroup'
+import { useAuthDispatch, useAuthState } from '../context/auth'
 
 const Login: React.FC = () => {
+  const router = useRouter()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<any>({})
+  
+  const {authenticated} = useAuthState()
+  const dispatch = useAuthDispatch()
 
-  const router = useRouter()
+  if(authenticated) router.push('/')
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     try {
@@ -20,6 +27,8 @@ const Login: React.FC = () => {
       {
         withCredentials: true,
       })
+      dispatch({type: "LOGIN", payload: res.data?.user})
+      
       console.log('res', res);
       router.push('/')
     } catch (error: any) {
