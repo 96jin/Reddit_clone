@@ -70,9 +70,19 @@ const topSubs = async(req: Request , res: Response) => {
   }
 }
 
+const getSub = async(req: Request, res:Response) => {
+  const {subName} = req.params
+  try{
+    const sub = await Sub.findOneByOrFail({name: subName})
+  }catch(error){
+    return res.status(404).json({error: '서브를 찾을 수 없음'})
+  }
+}
+
 const router = Router();
 
 // 만들어준 미들웨어를 createSub 핸들러에서 사용해주기 위해서
 router.post("/", userMiddleware, authMiddleware, createSub);
 router.get('/topSubs', topSubs)
+router.get('/:subName', userMiddleware, getSub)
 export default router;
