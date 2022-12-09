@@ -6,6 +6,7 @@ import { getRepository } from "typeorm";
 import Sub from "../entity/Sub";
 import { AppDataSource } from "../data-source";
 import User from "../entity/User";
+import Post from "../entity/Post";
 
 const createSub = async (req: Request, res: Response, next: NextFunction) => {
   const { name, title, description } = req.body;
@@ -15,9 +16,10 @@ const createSub = async (req: Request, res: Response, next: NextFunction) => {
     if (isEmpty(name)) return (errors.name = "이름은 비워둘 수 없습니다.");
     if (isEmpty(title)) return (errors.title = "제목은 비워둘 수 없습니다.");
 
-    const sub = await AppDataSource.getRepository(Sub)
+    const sub = await AppDataSource
+      .getRepository(Sub)
       .createQueryBuilder("sub")
-      .where("lower(sub.name) =:name ", { name: name.toLowerCase() }) // :name 하면 뒤에 name 객체에 해당하는 value 가져옴
+      .where("lower(sub.name) = :name ", { name: name.toLowerCase() }) // :name 하면 뒤에 name 객체에 해당하는 value 가져옴
       .getOne();
 
     if (sub) errors.name = "서브가 이미 존재합니다.";
@@ -46,9 +48,31 @@ const createSub = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const topSubs = async(req: Request , res: Response) => {
+  try{
+    const imageUrlExp = `COALESCE(s.imageUrn , 'https://www.gravatar.com/avatar?d=mp&f=y')`
+
+    const subs = await AppDataSource
+      .createQueryBuilder()
+      .select(
+        `s.title, s.name, ${imageUrlExp} as "imageUrl", count(p.id) as "postCount"`
+      )
+      .from(Sub, 's')
+      .leftJoin(Post, "p", 's.name = p.subName')
+      .groupBy('s.title, s.name, "imageUrl"')
+      .orderBy('"postCount"','DESC')
+      .limit(5)
+      .execute()
+    return res.json(subs)
+  }catch(error){
+    console.log(error)
+    return res.status(500).json({error: 'Something went wrong'})
+  }
+}
+
 const router = Router();
 
 // 만들어준 미들웨어를 createSub 핸들러에서 사용해주기 위해서
 router.post("/", userMiddleware, authMiddleware, createSub);
-
+router.get('/topSubs', topSubs)
 export default router;

@@ -84,10 +84,10 @@ const login = async (req: Request, res: Response) => {
 
     // 비밀번호가 일치하면 토큰 생성, ! 을 붙이는 이유는 변수가 지금 undefined나 null이 될 수 없다는 것을 의미
     const token = jwt.sign({ email }, process.env.JWT_SECRET!);
-
+    
     // 쿠키 저장
     // var setCookie = cookie.serialize('foo','bar');
-    res.set("Set-Cookie", cookie.serialize("token", token,{
+    res.set("Set-Cookie", cookie.serialize("Token", token,{
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -102,9 +102,24 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+const logout = (req: Request, res: Response) => {
+  res.set(
+    "Set-Cookie",
+    cookie.serialize("Token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      expires: new Date(0),
+      path: "/",
+    })
+  );
+  res.status(200).json({success:true})
+};
+
 const router = Router();
 router.get('/me', userMiddleware, authMiddleware, me)
 router.post("/register", register);
 router.post("/login", login);
+router.post('/logout', userMiddleware, authMiddleware, logout)
 
 export default router;

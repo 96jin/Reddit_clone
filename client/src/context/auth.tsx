@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { createContext, useContext, useEffect, useReducer } from 'react';
 import { User } from '../types';
 
@@ -52,12 +53,12 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     authenticated: false,
     loading: true
   })
-
+  
   useEffect(()=>{
     async function loadUser(){
       try {
         const res = await axios.get('/auth/me')
-        console.log(res.data)
+        // console.log(res.data)
         dispatch({type: "LOGIN", payload: res.data})
       } catch (error) {
         console.log(error)
