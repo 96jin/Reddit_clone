@@ -1,3 +1,4 @@
+import { instanceToPlain } from 'class-transformer';
 import {BaseEntity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm'
 
 // 공통적으로 사용되는 열 들을 BaseEntity 에 넣어준다.
@@ -11,4 +12,8 @@ export default abstract class Entity1 extends BaseEntity{
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  toJSON(){
+    return instanceToPlain(this)
+  }
 }

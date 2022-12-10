@@ -57,7 +57,7 @@ export default function List() {
               <Link href={`/r/${list.name}`}
               className="ml-2 font-bold hover:cursor-pointer"
               >
-                /r/${list.name}
+                /r/{list.name}
               </Link>
               <p className='ml-auto font-medium'>{list.postCount}</p>
             </div>

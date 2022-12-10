@@ -7,6 +7,7 @@ import Sub from "../entity/Sub";
 import { AppDataSource } from "../data-source";
 import User from "../entity/User";
 import Post from "../entity/Post";
+import { upload, uploadSubImage } from "../middlewares/upload";
 
 const createSub = async (req: Request, res: Response, next: NextFunction) => {
   const { name, title, description } = req.body;
@@ -74,15 +75,35 @@ const getSub = async(req: Request, res:Response) => {
   const {subName} = req.params
   try{
     const sub = await Sub.findOneByOrFail({name: subName})
+    res.json(sub)
   }catch(error){
     return res.status(404).json({error: '서브를 찾을 수 없음'})
   }
 }
 
+const ownSub = async (req: Request, res: Response, next: NextFunction) => {
+  const user: User = res.locals.user
+
+  try{
+    const sub = await Sub.findOneOrFail({where :{ name: req.params.subName}})
+    if(sub.username !== user.username){
+      return res.status(403).json({error: '이 커뮤니티를 소유하고 있지 않습니다.'})
+    }
+    res.locals.sub = sub
+    return next()
+  }
+  catch(error){
+    console.log(error)
+    return res.status(500).json({error: '문제가 발생했습니다.'})
+  }
+}
+
+
 const router = Router();
 
 // 만들어준 미들웨어를 createSub 핸들러에서 사용해주기 위해서
 router.post("/", userMiddleware, authMiddleware, createSub);
+router.post('/:subName/upload', userMiddleware, authMiddleware, ownSub, upload.single('file'), uploadSubImage)
 router.get('/topSubs', topSubs)
 router.get('/:subName', userMiddleware, getSub)
 export default router;

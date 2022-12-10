@@ -17,7 +17,8 @@ export default async ( req: Request, res: Response, next: NextFunction) => {
     // 유저 정보를 res.locals.user에 넣어주기
     res.locals.user = user
     return next()
-  }catch(error){
+  }
+  catch(error){
     console.log(error)
     return res.status(400).json({error: "Somethine went wrong"})
   }
