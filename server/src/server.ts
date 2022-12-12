@@ -3,6 +3,7 @@ import morgan from 'morgan'
 // 로그 관리
 import authRoutes from './routes/auth'
 import subRoutes from './routes/subs'
+import postsRoutes from './routes/posts'
 import { AppDataSource } from './data-source'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -26,6 +27,10 @@ app.get('/', (req,res) => {
 })
 app.use('/api/auth',authRoutes)
 app.use('/api/subs',subRoutes)
+app.use('/api/posts',postsRoutes)
+
+// public 하위 파일들을 정적으로 제공하겠다.
+app.use(express.static('public'))
 
 const PORT = process.env.PORT || 5000;
 

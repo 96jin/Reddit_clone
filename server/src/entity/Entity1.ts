@@ -14,6 +14,7 @@ export default abstract class Entity1 extends BaseEntity{
   updatedAt: Date;
 
   toJSON(){
-    return instanceToPlain(this)
+    return instanceToPlain(this)  
+    // 이걸 해줘야 expose()에서 return 한걸 프론트로 보낼 수 있다.
   }
 }

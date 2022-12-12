@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import cls from 'classnames';
 import Image from 'next/image';
 import { useAuthState } from '../../context/auth';
+import Sidebar from '../../components/Sidebar';
 
 export default function DetailSub() {
 
@@ -21,11 +22,11 @@ export default function DetailSub() {
     }
   }
   const router = useRouter()
-  const subName = router.query.sub
-  console.log('subName',subName)
+  const subName = router.query.sub  // []안의 단어가 query로 들어간다.
   const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null , fetch)
-  console.log('sub', sub)
   
+  if(error) return alert('오류가 발생했습니다.')
+
   // 자신의 커뮤니티일때만 클릭
   const openFileInput = (type: string) => {
     if(!ownSub) return
@@ -86,7 +87,7 @@ export default function DetailSub() {
         </div>
         {/* Sub meta data */}
         <div className='h-20 bg-white'>
-          <div className='relative flex max-w-5xl px-5 mx-auto'>
+          <div className='relative flex max-w-full px-5 mx-auto'>
             <div className='absolute' style={{top: -15}}>
               {sub.imageUrl && (
                 <Image
@@ -98,6 +99,9 @@ export default function DetailSub() {
                   className={cls("rounded-full", {
                     "cursor-pointer" : ownSub,
                   })}
+                  style={{
+                    height:70
+                  }}
                 />
               )}
             </div>
@@ -112,8 +116,11 @@ export default function DetailSub() {
           </div>
         </div>
         {/* Posts & Sidebar */}
-        <div className='flex max-w-5xl px-4 pt-5 mx-auto'>
-          포스트
+        <div className='flex max-w-full px-4 pt-5 mx-auto'>
+          <div className='w-full md:mr-3 md:w-4/5'>
+
+          </div>
+          <Sidebar sub={sub}/>
         </div> 
       </div>}
     </>

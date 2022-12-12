@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ["www.gravatar.com"]
-  }
+    domains: ["www.gravatar.com" , "localhost"]
+  },
 }
 
 module.exports = nextConfig

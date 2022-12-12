@@ -20,7 +20,7 @@ const NavBar: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-x-0 max-w-5xl mx-auto top-0 z-10 flex items-center justify-between h-16 px-5 bg-white">
+    <div className="fixed inset-x-0 max-w-full mx-auto top-0 z-10 flex items-center justify-between h-16 px-5 bg-white">
       <span className="text-2xl font-semibold text-gray-400">
         <Link href="/">Community</Link>
       </span>

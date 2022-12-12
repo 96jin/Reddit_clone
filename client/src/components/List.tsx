@@ -49,9 +49,9 @@ export default function List() {
                 <Image
                 src={list.imageUrl}
                 alt='Sub'
-                className='rounded-full cursor-pointer'
                 width={24}
                 height={24}
+                className='rounded-full cursor-pointer h-6'
                 />
               </Link>
               <Link href={`/r/${list.name}`}
