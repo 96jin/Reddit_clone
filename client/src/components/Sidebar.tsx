@@ -15,7 +15,7 @@ const Sidebar = ({sub} : {sub: Sub}) => {
           </p>
         </div>
         <div className='p-3'>
-          <p className='mb-3 text-base'>{sub.description}</p>
+          <p className='mb-3 text-base'>{sub?.description}</p>
           <div className='flex mb-3 text-sm font-medium'>
             <div className='w-1/2'>
               <p>100</p>

@@ -8,18 +8,21 @@ const CreatePost = () => {
   const [body, setBody] = useState('')
 
   const router = useRouter()
-  
+  const {sub: subName} = router.query
 
   const submitPost = async(e: FormEvent) => {
     e.preventDefault()
-    if(title.trim() === '') return
+    if(title.trim() === '' || !subName) return
     try{
       const {data: post} = await axios.post('/posts',{
         title: title.trim(),
         body,
-        sub: sub.name
+        sub: subName
       })
-      router.push(`/r/${sub.name}/${post.identifier}/${post.slug}`)
+      router.push(`/r/${subName}/${post.identifier}/${post.slug}`)
+    }
+    catch(error){
+      console.log(error)
     }
   }
   return (
@@ -41,9 +44,9 @@ const CreatePost = () => {
               <div 
                 className='absolute mb-2 text-sm text-gray-400 select-none'
                 style={{
-                  top: 10, right: 10
+                  top: 3, right: 10
                 }}
-              ></div>
+              >{title.length}/20</div>
             </div>
             <textarea
               placeholder='Description'
@@ -70,6 +73,7 @@ const CreatePost = () => {
 export const getServerSideProps: GetServerSideProps = async({req, res}) => {
   try{
     const cookie = req.headers.cookie
+    console.log(cookie)
     if(!cookie) throw new Error('Missing auth token cookie')
 
     await axios.get('auth/me', {headers: {cookie}})

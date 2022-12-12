@@ -76,8 +76,20 @@ const getSub = async(req: Request, res:Response) => {
   const {subName} = req.params
   try{
     const sub = await Sub.findOneByOrFail({name: subName})
+
+    // 포스트를 생성한 후에 해당 sub에 속하는 포스트 정보들을 넣어주기
+    const posts = await Post.find({
+      where: {subName},
+      order: {createdAt: "DESC"},
+      relations: ["comments", "votes"]      
+    })
+    sub.posts = posts
+    if(res.locals.user){
+      sub.posts.forEach((p)=>p.setUserVote(res.locals.user))
+    }
     res.json(sub)
-  }catch(error){
+  }
+  catch(error){
     return res.status(404).json({error: '서브를 찾을 수 없음'})
   }
 }
