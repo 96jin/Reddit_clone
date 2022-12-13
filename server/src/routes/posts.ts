@@ -42,40 +42,59 @@ const getPost = async (req: Request, res: Response) => {
     if (res.locals.user) {
       post.setUserVote(res.locals.user);
     }
-    return res.json(post)
-  } 
-  catch (error) {
-    console.log(error)
-    return res.status(400).json({error: '게시물을 찾을 수 없습니다.'})
+    return res.json(post);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: "게시물을 찾을 수 없습니다." });
   }
 };
 
-const createPostComment = async(req: Request, res: Response) => {
-  const {identifier, slug} = req.params
-  const {body} = req.body
+const createPostComment = async (req: Request, res: Response) => {
+  const { identifier, slug } = req.params;
+  const { body } = req.body;
 
-  try{
-    const post = await Post.findOneByOrFail({identifier, slug})
-    const comment = new Comment()
-    comment.body = body
-    comment.username = res.locals.user.username
-    comment.post = post
+  try {
+    const post = await Post.findOneByOrFail({ identifier, slug });
+    const comment = new Comment();
+    comment.body = body;
+    comment.user = res.locals.user;
+    comment.post = post;
 
-    if(res.locals.user){
-      post.setUserVote(res.locals.user)
+    if (res.locals.user) {
+      post.setUserVote(res.locals.user);
     }
 
-    await comment.save()
-    return res.json(comment)
+    await comment.save();
+    return res.json(comment);
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({ error: "게시물을 찾을 수 없습니다." });
   }
-  catch(error){
-    console.log(error)
-    return res.status(404).json({error: '게시물을 찾을 수 없습니다.'})
+};
+
+const getPostComments = async (req: Request, res: Response) => {
+  const { identifier, slug } = req.params;
+  try {
+    const post = await Post.findOneOrFail({ where: { identifier, slug } });
+    console.log(post);
+    const comments = await Comment.find({
+      where: { postId: post.id },
+      order: { createdAt: "DESC" },
+      relations: ["votes"],
+    });
+    if (res.locals.user) {
+      comments.forEach((c) => c.setUserVote(res.locals.user));
+    }
+    return res.json(comments);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Something went wrong" });
   }
-}
+};
 
 router.get("/:identifier/:slug", userMiddleware, getPost);
+router.get("/:identifier/:slug/comments", userMiddleware, getPostComments);
 router.post("/", userMiddleware, authMiddleware, createPost);
-router.post('/:identifier/:slug/comments', userMiddleware, createPostComment)
+router.post("/:identifier/:slug/comments", userMiddleware, createPostComment);
 
 export default router;

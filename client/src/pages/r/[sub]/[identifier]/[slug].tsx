@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { FormEvent, useState } from 'react'
 import useSWR from 'swr';
-import { Post } from '../../../../types';
+import { Comment, Post } from '../../../../types';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import Sidebar from '../../../../components/Sidebar';
@@ -17,13 +17,15 @@ const PostPage = () => {
   const {data: post, error} = useSWR<Post>(
     identifier && slug ? `/posts/${identifier}/${slug}` : null
     )
-  
+  const {data: comments} = useSWR<Comment[]>(
+    identifier && slug ? `/posts/${identifier}/${slug}/comments` : null)
+  console.log(comments)
   const submitComment = async(e: FormEvent) => {
     e.preventDefault()
     if(newComment.trim() === "") return
 
     try{
-      await axios.post(`/posts/${post!.identifier}/${post!.slug}/comments`,{
+      await axios.post(`/posts/${post?.identifier}/${post?.slug}/comments`,{
         body: newComment
       })
       setNewComment("")
@@ -79,7 +81,7 @@ const PostPage = () => {
                       >
                         {user!.username}
                       </Link>
-                      {" "}으로 댓글 작성
+                      {" "}(으)로 댓글 작성
                     </p>
                     <form onSubmit={submitComment}>
                       <textarea 
@@ -112,6 +114,27 @@ const PostPage = () => {
                     </div>
                   </div>
                 )}
+                {comments?.map((comment)=>(
+                  <div className='flex' key={comment.identifier}>
+                    <div className='py-2 pr-2'>
+                      <p className='mb-1 text-xs leading-none'>
+                        <Link href={`/u/${comment.username}`}
+                          className="mr-1 font-bold hover:underline"
+                        >
+                          {comment.username}
+                        </Link>
+                        <span className='text-gray-600'>
+                          {`
+                          ${comment.voteScore}
+                          posts 
+                          ${dayjs(comment.createdAt).format("YYYY-MM-DD HH:mm")}
+                          `}
+                        </span>
+                      </p>
+                      <p>{comment.body}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </>
           )}

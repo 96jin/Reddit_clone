@@ -16,12 +16,16 @@ export default class Comment extends Entity1{
   @Column()
   body: string;
 
-  @ManyToOne(()=>User)
-  @JoinColumn({name: 'username', referencedColumnName: 'username'})
+  @Column()
   username: string;
 
   @Column()
-  postid: number;
+  postId: number;
+  // 자동으로 post의 id를 찾아서 들어간다.
+
+  @ManyToOne(()=>User)
+  @JoinColumn({name: 'username', referencedColumnName:'username'})
+  user: User;
 
   @ManyToOne(()=>Post, (post)=>post.comments, {nullable:false})
   post: Post;
