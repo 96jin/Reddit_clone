@@ -7,7 +7,7 @@ import Link from 'next/link';
 const Sidebar = ({sub} : {sub: Sub}) => {
   const {authenticated} = useAuthState()
   return (
-    <div className='hidden w-1/5 ml-3 md:block'>
+    <div className='hidden w-4/12 ml-3 md:block'>
       <div className='bg-white border rounded'>
         <div className='p-3 bg-gray-400 rounded-t'>
           <p className='font-semibold text-white'>

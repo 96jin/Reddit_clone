@@ -6,6 +6,8 @@ import cls from 'classnames';
 import Image from 'next/image';
 import { useAuthState } from '../../context/auth';
 import Sidebar from '../../components/Sidebar';
+import { Post } from '../../types';
+import  Link  from 'next/link';
 
 export default function DetailSub() {
 
@@ -14,16 +16,9 @@ export default function DetailSub() {
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const fetch = async(url: string) => {
-    try{
-      return await axios.get(url).then((res: any)=>res.data)
-    }catch(error: any){
-      throw error.response.data
-    }
-  }
   const router = useRouter()
   const subName = router.query.sub  // []안의 단어가 query로 들어간다.
-  const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null , fetch)
+  const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null)
   
   if(error) return alert('오류가 발생했습니다.')
 
@@ -116,9 +111,15 @@ export default function DetailSub() {
           </div>
         </div>
         {/* Posts & Sidebar */}
-        <div className='flex max-w-full px-4 pt-5 mx-auto'>
-          <div className='w-full md:mr-3 md:w-4/5'>
-
+        <div className='flex max-w-5xl px-4 pt-5 mx-auto'>
+          <div className='w-full md:mr-3 md:w-8/12'>
+            {sub.posts?.map((list: Post)=>(
+              <div key={list.identifier}>
+                <Link href={`/r/${subName}/${list.identifier}/${list.slug}`}>
+                  {list.title}
+                </Link>
+              </div>
+            ))}
           </div>
           <Sidebar sub={sub}/>
         </div> 

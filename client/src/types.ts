@@ -33,7 +33,7 @@ export interface Post {
   url: string;
   userVote?: number;
   voteScore?: number;
-  commentCoute?: number;
+  commentCount?: number;
 }
 
 export interface Comment {

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import { createContext, useContext, useEffect, useReducer } from 'react';
 import { User } from '../types';
 
