@@ -11,7 +11,7 @@ import { upload, uploadSubImage } from "../middlewares/upload";
 
 const createSub = async (req: Request, res: Response, next: NextFunction) => {
   const { name, title, description } = req.body;
-  console.log(name, title, description);
+  
   try {
     let errors: any = {};
     if (isEmpty(name)) return (errors.name = "이름은 비워둘 수 없습니다.");

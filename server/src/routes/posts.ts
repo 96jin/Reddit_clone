@@ -76,7 +76,7 @@ const getPostComments = async (req: Request, res: Response) => {
   const { identifier, slug } = req.params;
   try {
     const post = await Post.findOneOrFail({ where: { identifier, slug } });
-    console.log(post);
+
     const comments = await Comment.find({
       where: { postId: post.id },
       order: { createdAt: "DESC" },

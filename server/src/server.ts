@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import authRoutes from './routes/auth'
 import subRoutes from './routes/subs'
 import postsRoutes from './routes/posts'
+import votesRoutes from './routes/votes'
 import { AppDataSource } from './data-source'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -28,6 +29,7 @@ app.get('/', (req,res) => {
 app.use('/api/auth',authRoutes)
 app.use('/api/subs',subRoutes)
 app.use('/api/posts',postsRoutes)
+app.use('/api/votes',votesRoutes)
 
 // public 하위 파일들을 정적으로 제공하겠다.
 app.use(express.static('public'))

@@ -8,6 +8,7 @@ import { useAuthState } from '../../context/auth';
 import Sidebar from '../../components/Sidebar';
 import { Post } from '../../types';
 import  Link  from 'next/link';
+import PostCard from '../../components/PostCard';
 
 export default function DetailSub() {
 
@@ -49,6 +50,19 @@ export default function DetailSub() {
     }
   }
 
+  let renderPosts;
+  if(!sub){
+    renderPosts = <p className='text-lg text-center'>로딩중..</p>
+  }
+  else if(sub.posts.length === 0){
+    renderPosts = <p className='text-lg text-center'>아직 작성된 포스트가 없습니다.</p>
+  }
+  else{
+    renderPosts = sub.posts.map((post: Post)=>(
+      <PostCard key={post.identifier} post={post}/>
+    ))
+  }
+
   useEffect(() => {
     if(!sub) return
     setOwnSub(authenticated && user!.username === sub.username)
@@ -82,7 +96,7 @@ export default function DetailSub() {
         </div>
         {/* Sub meta data */}
         <div className='h-20 bg-white'>
-          <div className='relative flex max-w-full px-5 mx-auto'>
+          <div className='relative flex max-w-5xl px-5 mx-auto'>
             <div className='absolute' style={{top: -15}}>
               {sub.imageUrl && (
                 <Image
@@ -113,13 +127,7 @@ export default function DetailSub() {
         {/* Posts & Sidebar */}
         <div className='flex max-w-5xl px-4 pt-5 mx-auto'>
           <div className='w-full md:mr-3 md:w-8/12'>
-            {sub.posts?.map((list: Post)=>(
-              <div key={list.identifier}>
-                <Link href={`/r/${subName}/${list.identifier}/${list.slug}`}>
-                  {list.title}
-                </Link>
-              </div>
-            ))}
+            {renderPosts}
           </div>
           <Sidebar sub={sub}/>
         </div> 

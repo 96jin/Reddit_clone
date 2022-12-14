@@ -9,7 +9,7 @@ const CreatePost = () => {
 
   const router = useRouter()
   const {sub: subName} = router.query
-
+  
   const submitPost = async(e: FormEvent) => {
     e.preventDefault()
     if(title.trim() === '' || !subName) return
@@ -19,6 +19,7 @@ const CreatePost = () => {
         body,
         sub: subName
       })
+      
       router.push(`/r/${subName}/${post.identifier}/${post.slug}`)
     }
     catch(error){

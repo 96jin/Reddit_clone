@@ -29,11 +29,12 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-      <script defer 
-      src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" 
-      integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" 
-      crossOrigin="anonymous">
-      </script>
+        <script defer 
+          src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" 
+          integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" 
+          crossOrigin="anonymous">
+        </script>
+        <title>Reddit_Clone</title>
       </Head>
       <SWRConfig value={{ fetcher }}>
         <AuthProvider>
