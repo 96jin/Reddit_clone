@@ -5,8 +5,11 @@ import classNames from "classnames";
 import Link from "next/link";
 import Image from "next/image";
 import dayjs from "dayjs";
+import { useAuthState } from '../context/auth';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
-const PostCard = ({ post }: { post: Post }) => {
+const PostCard = ({ post, subMutate }: { post: Post, subMutate?: () => void }) => {
   const {
     identifier,
     slug,
@@ -21,6 +24,28 @@ const PostCard = ({ post }: { post: Post }) => {
     username,
     sub,
   } = post;
+
+  const {authenticated} = useAuthState()
+  const router = useRouter()
+  const isInSubPage = router.pathname === '/r/[sub]'
+
+  const vote = async(value: number) => {
+    if(!authenticated) router.push('/login')
+
+    if(value === userVote) value = 0 
+    try{
+      await axios.post('/votes',{
+        identifier,
+        slug,
+        value,
+      })
+      if(subMutate) subMutate()
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+  
   return (
     <div
       key={identifier}
@@ -32,7 +57,7 @@ const PostCard = ({ post }: { post: Post }) => {
         {/* Up Vote */}
         <div
           className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
-          // onClick={() => vote(1)}
+          onClick={() => vote(1)}
         >
           <FaAngleUp
             className={classNames("mx-auto", {
@@ -44,7 +69,7 @@ const PostCard = ({ post }: { post: Post }) => {
         {/* Down Vote */}
         <div
           className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-600"
-          // onClick={() => vote(-1)}
+          onClick={() => vote(-1)}
         >
           <FaAngleDown
             className={classNames("mx-auto", {
@@ -55,11 +80,11 @@ const PostCard = ({ post }: { post: Post }) => {
       </div>
       <div className="w-full p-2">
         <div className="flex items-center">
-          {true && (
+          {isInSubPage && (
             <>
               <Link href={`/r/${subName}`}>
                 <Image
-                  src={sub?.imageUrl || "https://www.gravatar.com/avatar?d=mp&f=y"}
+                  src={sub!.imageUrl}
                   alt="sub"
                   width={24}
                   height={24}

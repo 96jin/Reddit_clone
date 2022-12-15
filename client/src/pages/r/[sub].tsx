@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { useAuthState } from '../../context/auth';
 import Sidebar from '../../components/Sidebar';
 import { Post } from '../../types';
-import  Link  from 'next/link';
 import PostCard from '../../components/PostCard';
 
 export default function DetailSub() {
@@ -19,7 +18,7 @@ export default function DetailSub() {
 
   const router = useRouter()
   const subName = router.query.sub  // []안의 단어가 query로 들어간다.
-  const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null)
+  const {data: sub, error, mutate: subMutate} = useSWR(subName ? `/subs/${subName}` : null)
   
   if(error) return alert('오류가 발생했습니다.')
 
@@ -59,7 +58,7 @@ export default function DetailSub() {
   }
   else{
     renderPosts = sub.posts.map((post: Post)=>(
-      <PostCard key={post.identifier} post={post}/>
+      <PostCard key={post.identifier} post={post} subMutate={subMutate}/>
     ))
   }
 

@@ -25,6 +25,7 @@ export default class Sub extends Entity1{
   @Column()
   username: string;
 
+  // find에서 relations 에 적어줘야 출력해준다.
   @ManyToOne(()=>User)  // 연관관계 JoinColumn등을 쓸 때 다중성을 나타내는 데코레이터 @ManyToMany , @ManyToOne, @OneToOne.. 등을 필수로 사용해야한다
   @JoinColumn({name: 'username', referencedColumnName: 'username'}) // referencedColumnName 를 명시하지않으면 해당 테이블의 Pk를 참조함
   user: User;

@@ -34,6 +34,7 @@ const PostPage = () => {
       await axios.post(`/posts/${post?.identifier}/${post?.slug}/comments`, {
         body: newComment,
       });
+      postMutate()
       commentMutate(); // 캐시된 데이터를 갱신하기 위한 함수, 해당 통신을 한번 더 호출해준다.
       setNewComment("");
     } catch (error) {
@@ -64,7 +65,7 @@ const PostPage = () => {
       console.log(error);
     }
   };
-
+  
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">
       {/* Post  */}

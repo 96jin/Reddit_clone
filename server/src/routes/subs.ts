@@ -79,7 +79,7 @@ const getSub = async (req: Request, res: Response) => {
     const posts = await Post.find({
       where: { subName },
       order: { createdAt: "DESC" },
-      relations: ["comments", "votes"],
+      relations: ["sub","comments", "votes"],
     });
     sub.posts = posts;
     if (res.locals.user) {

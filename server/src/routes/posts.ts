@@ -37,8 +37,9 @@ const getPost = async (req: Request, res: Response) => {
   try {
     const post = await Post.findOneOrFail({
       where: { identifier, slug },
-      relations: ["sub", "votes"],
+      relations: ["comments","sub", "votes"],
     });
+    
     if (res.locals.user) {
       post.setUserVote(res.locals.user);
     }
@@ -92,6 +93,29 @@ const getPostComments = async (req: Request, res: Response) => {
   }
 };
 
+const getPosts = async(req: Request, res: Response) => {
+  const currentPage: number = (req.query.page || 0) as number
+  const perPage: number = (req.query.count || 6) as number
+
+  try{
+    const posts = await Post.find({
+      order: {createdAt: "DESC"},
+      relations: ["sub", "votes", "comments"],
+      skip: currentPage * perPage,  // 이미 로드한 post는 스킵
+      take: perPage,  // 몇개를 가져올건지 (take)
+    })
+    if(res.locals.user) {
+      posts.forEach((p)=>p.setUserVote(res.locals.user))
+    }
+    return res.json(posts)
+  }
+  catch(error){
+    console.log(error)
+    res.status(500).json({error: 'Something went wrong'})
+  }
+}
+
+router.get('/',userMiddleware, getPosts)
 router.get("/:identifier/:slug", userMiddleware, getPost);
 router.get("/:identifier/:slug/comments", userMiddleware, getPostComments);
 router.post("/", userMiddleware, authMiddleware, createPost);
