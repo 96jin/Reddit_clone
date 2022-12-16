@@ -21,6 +21,8 @@ export default function List() {
 
   const address = "http://localhost:5000/api/subs/topSubs";
 
+  // userSWRInfinite Hook 내에서 아래 변수를 받도록 설정되어있다.
+  // 처음에 0과 null 이 들어감.
   const getKey = (pageIndex: number, previousPageData: Post[]) => {
     if(previousPageData && !previousPageData.length) return null
     return `/posts?page=${pageIndex}`
@@ -42,8 +44,9 @@ export default function List() {
   
   const onClickCreate = async () => {
     try {
-      const res = await axios.get("/auth/me");
-    } catch (error) {
+      await axios.get("/auth/me");
+    } 
+    catch (error) {
       console.log(error);
       router.push("/login");
     }
@@ -60,10 +63,12 @@ export default function List() {
     // 바뀐 post 중 마지막 post를 observedPost로 
     if(id !== observedPost){
       setObservedPost(id)
+      // id를 identifier로 div 생성했었다. 그 div태그를 관찰한다.
       observeElement(document.getElementById(id))
     }
   },[posts])
 
+  // 관찰하는 함수
   const observeElement = (element: HTMLElement | null) => {
     if(!element) return
     // 브라우저 viewport 와 설정한 요소(element)의 교차점을 관찰
@@ -77,7 +82,9 @@ export default function List() {
           observer.unobserve(element)
         }
       },
+      // 옵션
       {threshold: 1}
+      // 관찰 엘리먼트가 전부 다 화면에 들어오면(1)
     )
     // 대상 요소의 관찰을 시작
     observer.observe(element)

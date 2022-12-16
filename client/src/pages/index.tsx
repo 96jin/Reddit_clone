@@ -1,8 +1,10 @@
+import Head from 'next/head'
 import List from '../components/List'
-import styles from '../styles/Home.module.css'
 
 export default function Home() {
   return (
-    <List/>
+    <>
+      <List/>
+    </>
   )
 }

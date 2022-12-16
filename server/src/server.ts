@@ -5,6 +5,7 @@ import authRoutes from './routes/auth'
 import subRoutes from './routes/subs'
 import postsRoutes from './routes/posts'
 import votesRoutes from './routes/votes'
+import usersRoutes from './routes/users'
 import { AppDataSource } from './data-source'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -30,6 +31,7 @@ app.use('/api/auth',authRoutes)
 app.use('/api/subs',subRoutes)
 app.use('/api/posts',postsRoutes)
 app.use('/api/votes',votesRoutes)
+app.use('/api/users', usersRoutes)
 
 // public 하위 파일들을 정적으로 제공하겠다.
 app.use(express.static('public'))

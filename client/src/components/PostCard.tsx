@@ -53,7 +53,7 @@ const PostCard = ({ post, subMutate }: { post: Post, subMutate?: () => void }) =
       id={identifier}
     >
       {/* Vote Section */}
-      <div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
+      <div className="flex-shrink-0 w-10 py-2 text-center rounded-l bg-gray-200">
         {/* Up Vote */}
         <div
           className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"

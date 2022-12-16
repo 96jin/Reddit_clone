@@ -82,6 +82,8 @@ export const getServerSideProps: GetServerSideProps = async ({req,res}) => {
     const cookie = req.headers.cookie;
     if(!cookie) throw  new Error("Missing auth token cookie")
 
+    // 헤더에 쿠키를 담아서 보낸다.
+    // 하지만 app.tsx에서 withCredentials = true 를 줬으므로 따로 헤더에 쿠키를 넣을 필요 없이 모든 요청에서 헤드에 쿠키를 담는다.
     await axios.get('/auth/me',{headers: {cookie}})
 
     return {props: {}}
