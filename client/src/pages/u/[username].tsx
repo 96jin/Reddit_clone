@@ -28,11 +28,11 @@ const UserPage = () => {
                 key={comment.identifier}
                 className="flex my-4 bg-white rounded"
               >
-                <div className="flex-shrink-0 w-10 py-10 text-center bg-gray-200 rounded-l">
+                <div className="flex-shrink-0 w-10 py-10 text-center border-r rounded-l">
                   <i className="text-gray-500 fas fa-comment-alt fa-xs"></i>
                 </div>
                 <div className="w-full p2">
-                  <p className="mb-2 text-xs text-gray-500">
+                  <p className="mb-2 pt-1.5 ml-1 text-xs text-gray-500">
                     <Link
                       href={`/u/${comment.username}`}
                       className="cursor-pointer hover:underline"
@@ -64,19 +64,19 @@ const UserPage = () => {
       </div>
       {/* 유저 정보 */}
       <div className="hidden w-4/12 ml-3 md:block">
-        <div className="flex items-center p-3 bg-gray-400 rounded-t">
+        <div className="flex justify-center items-center p-3 bg-gray-400 rounded-t">
           <Image
             src="https://www.gravatar.com/avatar/0000?d=mp&f=y"
             alt="user profile"
-            className="mx-auto border border-white rounded-full"
-            width={(6 * 16) / 6}
-            height={(6 * 16) / 6}
-            style={{ height: (6 * 16) / 6 }}
+            className="border border-white rounded-full"
+            width={24}
+            height={24}
+            style={{ height: 24 }}
           />
           <p className="pl-2 text-md">{data.user.username}</p>
         </div>
-        <div className="p-3">
-          <p>{dayjs(data.user.createdAt).format("YYYY.MM.DD")}가입</p>
+        <div className="p-3 text-center bg-white">
+          <p>{dayjs(data.user.createdAt).format("YYYY.MM.DD")} 가입</p>
         </div>
       </div>
     </div>

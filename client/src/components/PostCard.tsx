@@ -53,7 +53,7 @@ const PostCard = ({ post, subMutate }: { post: Post, subMutate?: () => void }) =
       id={identifier}
     >
       {/* Vote Section */}
-      <div className="flex-shrink-0 w-10 py-2 text-center rounded-l bg-gray-200">
+      <div className="flex-shrink-0 w-10 py-2 text-center rounded-l border-r">
         {/* Up Vote */}
         <div
           className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
@@ -80,25 +80,21 @@ const PostCard = ({ post, subMutate }: { post: Post, subMutate?: () => void }) =
       </div>
       <div className="w-full p-2">
         <div className="flex items-center">
-          {isInSubPage && (
-            <>
-              <Link href={`/r/${subName}`}>
-                <Image
-                  src={sub!.imageUrl}
-                  alt="sub"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 mr-1 rounded-full cursor-pointer"
-                  style={{height:24}}
-                /></Link>
-                <Link href={`/r/${subName}`}
-                  className="text-xs font-bold cursor-pointer hover:underline"
-                >
-                  /r/{subName}
-                </Link>
-                <span className="mx-1 text-xs text-gray-500">•</span>
-            </>
-          )}
+          <Link href={`/r/${subName}`}>
+            <Image
+              src={sub!.imageUrl}
+              alt="sub"
+              width={16}
+              height={16}
+              className="w-6 h-6 mr-1 rounded-full cursor-pointer"
+              style={{height:16, width:16}}
+            /></Link>
+            <Link href={`/r/${subName}`}
+              className="text-xs font-bold cursor-pointer hover:underline"
+            >
+              /r/{subName}
+            </Link>
+            <span className="mx-1 text-xs text-gray-500">•</span>
           <p className="text-xs text-gray-500">
             Posted by
             <Link href={`/u/${username}`} passHref>
