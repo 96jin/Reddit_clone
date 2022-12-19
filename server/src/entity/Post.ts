@@ -13,7 +13,9 @@ import User from "./User";
 import Sub from "./Sub";
 import Vote from "./Vote";
 import Comment from "./Comment";
-import { makeId, slugfy } from "../utils/helper";
+import { makeId } from "../utils/helper";
+import {slugify as slugfy} from "transliteration"
+// 한글명도 slugfy 해주기 위해 따로 가져온다.
 
 @Entity("posts")
 export default class Post extends Entity1 {
